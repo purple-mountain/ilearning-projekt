@@ -1,0 +1,137 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum Role {
+    BASIC
+    ADMIN
+}
+
+model User {
+    id          String       @id @default(uuid())
+    name        String
+    username    String       @unique
+    email       String       @unique
+    birthDate   DateTime
+    role        Role         @default(BASIC)
+    collections Collection[] @relation("collections")
+    likes       Like[]       @relation("userLike")
+    comments    Comment[]    @relation("commentAuthor")
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+
+    @@index([email])
+}
+
+model Collection {
+    id        String   @id @default(uuid())
+    author    User     @relation("collections", fields: [authorId], references: [id], onDelete: Cascade)
+    authorId  String
+    topic     Topic    @relation("topic", fields: [topicId], references: [id], onDelete: Cascade)
+    topicId   String
+    items     Item[]   @relation("items")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Topic {
+    id         String       @id @default(uuid())
+    name       String
+    collection Collection[] @relation("topic")
+}
+
+model Item {
+    id              String            @id @default(uuid())
+    likes           Like[]            @relation("itemLike")
+    collection      Collection        @relation("items", fields: [collectionId], references: [id], onDelete: Cascade)
+    collectionId    String
+    tags            Tag[]             @relation("itemTags")
+    comments        Comment[]         @relation("commentsItem")
+    customIntField  customIntField[]  @relation("itemIntCustomField")
+    customStrField  customStrField[]  @relation("itemStrCustomField")
+    customTextField customTextField[] @relation("itemTextCustomField")
+    customBoolField customBoolField[] @relation("itemBoolCustomField")
+    customDateField customDateField[] @relation("itemDateCustomField")
+    createdAt       DateTime          @default(now())
+    updatedAt       DateTime          @updatedAt
+}
+
+model customIntField {
+    id     String @id @default(uuid())
+    name   String
+    value  Int
+    item   Item   @relation("itemIntCustomField", fields: [itemId], references: [id], onDelete: Cascade)
+    itemId String
+}
+
+model customStrField {
+    id     String @id @default(uuid())
+    name   String
+    value  String
+    item   Item   @relation("itemStrCustomField", fields: [itemId], references: [id], onDelete: Cascade)
+    itemId String
+}
+
+model customTextField {
+    id     String @id @default(uuid())
+    name   String
+    value  String
+    item   Item   @relation("itemTextCustomField", fields: [itemId], references: [id], onDelete: Cascade)
+    itemId String
+}
+
+model customBoolField {
+    id     String  @id @default(uuid())
+    name   String
+    value  Boolean
+    item   Item    @relation("itemBoolCustomField", fields: [itemId], references: [id], onDelete: Cascade)
+    itemId String
+}
+
+model customDateField {
+    id     String   @id @default(uuid())
+    name   String
+    value  DateTime
+    item   Item     @relation("itemDateCustomField", fields: [itemId], references: [id], onDelete: Cascade)
+    itemId String
+}
+
+model Tag {
+    id     String @id @default(uuid())
+    name   String
+    item   Item   @relation("itemTags", fields: [itemId], references: [id], onDelete: Cascade)
+    itemId String
+
+    @@index([name])
+}
+
+model Comment {
+    id        String   @id @default(uuid())
+    content   String
+    author    User     @relation("commentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+    authorId  String
+    item      Item     @relation("commentsItem", fields: [itemId], references: [id], onDelete: Cascade)
+    itemId    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Like {
+    id        String   @id @default(uuid())
+    user      User     @relation("userLike", fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    item      Item     @relation("itemLike", fields: [itemId], references: [id], onDelete: Cascade)
+    itemId    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([userId, itemId])
+}
