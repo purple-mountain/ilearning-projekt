@@ -6,7 +6,7 @@
     "lint": "eslint --ext ts,js --report-unused-disable-directives --max-warnings 0",
     "fix": "eslint --fix --ext ts,js",
     "build": "tsc",
-    "start": "node server.js",
+    "start": "node ./dist/index.js",
     "dev": "nodemon server.ts"
   },
   "license": "MIT",
