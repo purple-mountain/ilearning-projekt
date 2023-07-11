@@ -18,7 +18,11 @@ jobs:
           node-version: '16'
       - name: Install dependencies 
         run: yarn
-      - name: Check style
-        run: yarn lint
-      - name: Build
-        run: yarn build
+      - name: Check server style
+        run: yarn workspace server lint
+      - name: Check client style
+        run: yarn workspace client lint
+      - name: Server Build
+        run: yarn workspace server build
+      - name: Client Build
+        run: yarn workspace client build
