@@ -20,7 +20,7 @@ model User {
     name        String
     username    String       @unique
     email       String       @unique
-    birthDate   DateTime
+    password    String
     role        Role         @default(BASIC)
     collections Collection[] @relation("collections")
     likes       Like[]       @relation("userLike")
