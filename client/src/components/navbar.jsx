@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import users from "../services/users";
-import { useState } from "react";
 
 function Nav() {
     const navigate = useNavigate()
-    const { data, isLoading, isLoadingError } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["users"],
         queryFn: users.getCurrentUser,
     })
@@ -13,7 +12,6 @@ function Nav() {
         await users.logout()
         navigate('/login', { replace: true })
     }
-
     function handleLogin() {
         navigate('/login', { replace: true })
     }
@@ -26,7 +24,7 @@ function Nav() {
                 </Link>
                 <div className="flex items-center">
                     <p className="mr-6 text-sm  text-gray-500 dark:text-white">{isLoading ? 'Loading...' : data?.name}</p>
-                    {isLoading ? '' : isLoadingError ? <button onClick={handleLogin} className="text-sm  text-blue-600 dark:text-blue-500 hover:underline">Login</button> : <button onClick={handleLogout} className="text-sm  text-blue-600 dark:text-blue-500 hover:underline">Logout</button>}
+                    {isLoading ? '' : data?.name !== 'Guest' ? <button onClick={handleLogout} className="text-sm  text-blue-600 dark:text-blue-500 hover:underline">Logout</button> : <button onClick={handleLogin} className="text-sm  text-blue-600 dark:text-blue-500 hover:underline">Login</button>}
                 </div>
             </div>
         </nav>);
