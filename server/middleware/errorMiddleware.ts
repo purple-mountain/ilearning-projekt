@@ -1,12 +1,10 @@
-import { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler, Response } from "express";
 
-const errorMiddleware: ErrorRequestHandler = (error, req, res) => {
-    console.log(`err123 ${error}`)
-    res.status(error.status || 500);
-    res.send({
+const errorMiddleware: ErrorRequestHandler = (error, req, res: Response) => {
+    res.status(error.status || 500).json({
         error: {
-            status: error.status || 500,
-            message: error.message,
+            status: error?.status || 500,
+            message: error?.message,
         },
     });
 };

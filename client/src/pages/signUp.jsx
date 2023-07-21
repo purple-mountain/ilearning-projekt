@@ -1,21 +1,27 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import userService from "../services/users"
 
 function SignUp() {
+    const navigate = useNavigate()
     const { register, handleSubmit, formState } = useForm({ mode: "onSubmit" });
     const [errorMsg, setErrorMsg] = useState('')
+    const queryClient = useQueryClient()
+    const { mutate } = useMutation({
+        mutationFn: userService.authenticate,
+        onSuccess: user => {
+            queryClient.setQueryData(["users", user.username], user)
+            navigate('/', { replace: true })
+        }
+    })
 
     async function handleSignUp(user) {
         try {
-            console.log(user)
-            const userLogin = await userService.authenticate(user, 'create')
-            console.log(userLogin)
-            console.log('signUp')
-
-        } catch(err) {
-            console.log(err)
+            mutate({ user, action: 'create' })
+        } catch (err) {
+            setErrorMsg('Invalid username or email')
         }
     }
 

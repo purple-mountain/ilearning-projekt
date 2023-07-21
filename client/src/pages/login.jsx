@@ -2,35 +2,32 @@ import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import userService from "../services/users"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 function Login() {
     const { register, handleSubmit, formState } = useForm({ mode: "onSubmit" });
     const [errorMsg, setErrorMsg] = useState('')
     const navigate = useNavigate()
-    /* const userQuery = useQuery({
-        queryKey: ['users'],
-        queryFn: userService.authenticate
-    }) */
-
-
-    // await userService.logout()
+    const queryClient = useQueryClient()
+    const { mutate } = useMutation({
+        mutationFn: userService.authenticate,
+        onSuccess: user => {
+            queryClient.setQueryData(["users", user.username], user)
+            navigate('/', { replace: true })
+        }
+    })
 
     async function handleLogin(user) {
         try {
-            /*             const userLogin = await userService.authenticate(user, 'login')
-                        console.log(userLogin)
-                        console.log(user)
-                        console.log(formState) */
-            const data = await userService.refresh()
-            console.log(data)
+            mutate({
+                user,
+                action: 'login'
+            })
         } catch (err) {
-            console.log(err)
+            setErrorMsg('Invalid username or password')
         }
     }
-    // making refresh request in intervals with react query 
-    // maybe researching and doing it when accessToken === empty 
-    // settting up auth middleware 
-    // making comments, likes, collection, items api   
+
 
     return (
         <main className="bg-gray-50 dark:bg-gray-900">
@@ -61,12 +58,6 @@ function Login() {
         </main>
 
     )
-}
-
-function getErrorMsg(user) {
-    if (user.email && user.password)
-        return "Wrong email or password"
-    return "Please fill out all the required fields"
 }
 
 export { Login }
