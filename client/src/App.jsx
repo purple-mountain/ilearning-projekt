@@ -7,14 +7,12 @@ import { Collection } from './pages/collection';
 
 function App() {
     return (
-        <>
-            <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/login' element={<Login />} />
-                <Route path='/sign-up' element={<SignUp />} />
-                <Route path='/collections/:id' element={<Collection />} />
-            </Routes>
-        </>
+        <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/sign-up' element={<SignUp />} />
+            <Route path='/collections/:id' element={<Collection />} />
+        </Routes>
     );
 }
 
