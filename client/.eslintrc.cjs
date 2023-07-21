@@ -6,9 +6,7 @@ module.exports = {
         'plugin:react/recommended',
         'plugin:react/jsx-runtime',
         'plugin:react-hooks/recommended',
-        "airbnb",
-        "airbnb/hooks",
-        "plugin:@tanstack/eslint-plugin-query/recommended"
+        "plugin:@tanstack/eslint-plugin-query/recommended",
     ],
     parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
     settings: { react: { version: '18.2' } },
@@ -19,5 +17,6 @@ module.exports = {
             { allowConstantExport: true },
         ],
         "react/react-in-jsx-scope": "off",
+        "indent": ["error", 4]
     },
 }

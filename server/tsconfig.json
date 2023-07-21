@@ -4,8 +4,6 @@
     "module": "CommonJS",
     "sourceMap": true,
     "outDir": "dist",
-    // "noUnusedLocals": false,
-    // "noUnusedParameters: false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   }

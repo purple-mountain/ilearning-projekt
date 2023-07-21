@@ -1,16 +1,23 @@
+import { useQuery } from '@tanstack/react-query';
 import './assets/App.css';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { Home } from './pages/home'
+import { Login } from './pages/login';
+import { SignUp } from './pages/signUp';
 
 function App() {
-  // React must be in scope and other nonsense => resolve
-  // perhaps use prettier
-  return (
-    <>
-      <h1>Hello World</h1>
-      <h2>GoodBye World</h2>
-      <h3>Test client</h3>
-      <h4>Test 2</h4>
-    </>
-  );
+    const location = useLocation()
+    console.log(location)
+
+    return (
+        <>
+            <Routes>
+                <Route path='/' element={<Home />}></Route>
+                <Route path='login' element={<Login />}></Route>
+                <Route path='sign-up' element={<SignUp />}></Route>
+            </Routes>
+        </>
+    );
 }
 
 export default App;
