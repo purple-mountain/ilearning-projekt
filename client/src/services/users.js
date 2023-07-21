@@ -1,14 +1,23 @@
+import { api } from "../config/api"
 import { baseUrl } from "../config/baseUrl"
 import axios from "axios"
 
-async function authenticate(user, action) {
+async function authenticate({ user, action }) {
     const { data } = await axios.post(`${baseUrl}/api/users/${action}`, user, { withCredentials: true })
     return data
 }
 
+async function getCurrentUser() {
+    try {
+        const { data } = await api.get('/api/users/me', { withCredentials: true })
+        return data
+    } catch (err) {
+        return { name: "Guest" }
+    }
+}
+
 async function logout() {
-    console.log(123)
-    await axios.get(`${baseUrl}/api/users/logout`)
+    await axios.get(`${baseUrl}/api/users/logout`, { withCredentials: true })
 }
 
 async function refresh() {
@@ -22,6 +31,7 @@ async function remove() {
 
 export default {
     authenticate,
+    getCurrentUser,
     remove,
     logout,
     refresh

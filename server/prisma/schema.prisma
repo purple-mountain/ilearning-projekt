@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -15,6 +12,11 @@ enum Role {
     ADMIN
 }
 
+enum Language {
+    ENGLISH
+    RUSSIAN
+}
+
 model User {
     id          String       @id @default(uuid())
     name        String
@@ -22,86 +24,78 @@ model User {
     email       String       @unique
     password    String
     role        Role         @default(BASIC)
+    language    Language     @default(ENGLISH)
     collections Collection[] @relation("collections")
     likes       Like[]       @relation("userLike")
     comments    Comment[]    @relation("commentAuthor")
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt
 
-    @@index([email])
+    @@index([username])
 }
 
 model Collection {
-    id        String   @id @default(uuid())
-    author    User     @relation("collections", fields: [authorId], references: [id], onDelete: Cascade)
-    authorId  String
-    topic     Topic    @relation("topic", fields: [topicId], references: [id], onDelete: Cascade)
-    topicId   String
-    items     Item[]   @relation("items")
+    id          String @id @default(uuid())
+    name        String
+    description String
+    author      User   @relation("collections", fields: [authorId], references: [id], onDelete: Cascade)
+    authorId    String
+    topic       Topic  @relation("topic", fields: [topicId], references: [id], onDelete: Cascade)
+    topicId     String
+    items       Item[] @relation("items")
+
+    customIntFieldName1  String?
+    customIntFieldName2  String?
+    customIntFieldName3  String?
+    customStrFieldName1  String?
+    customStrFieldName2  String?
+    customStrFieldName3  String?
+    customBoolFieldName1 String?
+    customBoolFieldName2 String?
+    customBoolFieldName3 String?
+    customDateFieldName1 String?
+    customDateFieldName2 String?
+    customDateFieldName3 String?
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@unique([name, description])
 }
 
 model Topic {
     id         String       @id @default(uuid())
-    name       String
+    name       String       @unique
     collection Collection[] @relation("topic")
+
+    @@index([name])
 }
 
 model Item {
-    id              String            @id @default(uuid())
-    likes           Like[]            @relation("itemLike")
-    collection      Collection        @relation("items", fields: [collectionId], references: [id], onDelete: Cascade)
-    collectionId    String
-    tags            Tag[]             @relation("itemTags")
-    comments        Comment[]         @relation("commentsItem")
-    customIntField  customIntField[]  @relation("itemIntCustomField")
-    customStrField  customStrField[]  @relation("itemStrCustomField")
-    customTextField customTextField[] @relation("itemTextCustomField")
-    customBoolField customBoolField[] @relation("itemBoolCustomField")
-    customDateField customDateField[] @relation("itemDateCustomField")
-    createdAt       DateTime          @default(now())
-    updatedAt       DateTime          @updatedAt
-}
+    id           String     @id @default(uuid())
+    name         String
+    description  String
+    likes        Like[]     @relation("itemLike")
+    collection   Collection @relation("items", fields: [collectionId], references: [id], onDelete: Cascade)
+    collectionId String
+    tags         Tag[]      @relation("itemTags")
+    comments     Comment[]  @relation("commentsItem")
 
-model customIntField {
-    id     String @id @default(uuid())
-    name   String
-    value  Int
-    item   Item   @relation("itemIntCustomField", fields: [itemId], references: [id], onDelete: Cascade)
-    itemId String
-}
+    customIntField1  Int?
+    customIntField2  Int?
+    customIntField3  Int?
+    customStrField1  String?
+    customStrField2  String?
+    customStrField3  String?
+    customBoolField1 Boolean?
+    customBoolField2 Boolean?
+    customBoolField3 Boolean?
+    customDateField1 DateTime?
+    customDateField2 DateTime?
+    customDateField3 DateTime?
 
-model customStrField {
-    id     String @id @default(uuid())
-    name   String
-    value  String
-    item   Item   @relation("itemStrCustomField", fields: [itemId], references: [id], onDelete: Cascade)
-    itemId String
-}
-
-model customTextField {
-    id     String @id @default(uuid())
-    name   String
-    value  String
-    item   Item   @relation("itemTextCustomField", fields: [itemId], references: [id], onDelete: Cascade)
-    itemId String
-}
-
-model customBoolField {
-    id     String  @id @default(uuid())
-    name   String
-    value  Boolean
-    item   Item    @relation("itemBoolCustomField", fields: [itemId], references: [id], onDelete: Cascade)
-    itemId String
-}
-
-model customDateField {
-    id     String   @id @default(uuid())
-    name   String
-    value  DateTime
-    item   Item     @relation("itemDateCustomField", fields: [itemId], references: [id], onDelete: Cascade)
-    itemId String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model Tag {

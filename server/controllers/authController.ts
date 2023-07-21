@@ -2,37 +2,41 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { PrismaClient } from '@prisma/client'
 import { RequestHandler, Response } from "express";
-import { JwtToken, LoginUser, User as UserAuth } from "./types/User"
-import { generateKey } from "crypto";
+import { LoginUser, User as UserAuth } from "./types/User"
+import { JwtToken } from "../types/jwtToken";
+import { CustomReq } from "./types/CustomReq";
 
 const prisma = new PrismaClient()
 const registerUser: RequestHandler = async (req, res, next) => {
     try {
-        const cookie = req.cookies
-        console.log(cookie)
         const { email, username, name, password }: UserAuth = req.body
         const userExists = await checkUserExists(username)
         if (userExists)
             return res.status(400).json({ error: "User with that username already exists" })
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
-        const newUser = await prisma.user.create({
-            data: {
-                username: username,
-                password: hashedPassword,
-                email: email,
-                name: name
-            }
-        })
+        const newUser = await addNewUser(email, username, name, hashedPassword)
         if (!newUser) {
-            res.status(400).json({ error: "Invalid User Data" });
-            return;
+            return res.status(400).json({ error: "Invalid User Data" });
         }
         const accessToken = generateToken("15m", newUser.id)
         const refreshToken = generateToken("7d", newUser.id, newUser.role)
         sendCookie(res, 'accessToken', accessToken, 15 * 60 * 1000)
         sendCookie(res, 'refreshToken', refreshToken, 7 * 24 * 60 * 60 * 1000)
         res.status(201).json(newUser)
+    } catch (err) {
+        next(err)
+    }
+}
+
+const getMe: RequestHandler = async (req: CustomReq, res, next) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: req.user
+            }
+        })
+        res.status(200).json(user)
     } catch (err) {
         next(err)
     }
@@ -45,7 +49,6 @@ const loginUser: RequestHandler = async (req, res, next) => {
         const passwordCorrect = await bcrypt.compare(password, user.password);
         if (!(user && passwordCorrect))
             return res.status(401).json({ error: "Invalid username or password" });
-        console.log(123)
         const accessToken = generateToken("15m", user.id, user.role)
         const refreshToken = generateToken("7d", user.id)
         sendCookie(res, 'accessToken', accessToken, 15 * 60 * 1000)
@@ -84,6 +87,17 @@ const refresh: RequestHandler = async (req, res, next) => {
     }
 }
 
+function addNewUser(email: string, username: string, name: string, hashedPassword: string) {
+    return prisma.user.create({
+        data: {
+            username: username,
+            password: hashedPassword,
+            email: email,
+            name: name
+        }
+    })
+}
+
 function checkUserExists(username: string) {
     return prisma.user.findUnique({
         where: {
@@ -108,4 +122,4 @@ function sendCookie(res: Response, name: string, data: string, age: number) {
     })
 }
 
-export { registerUser, loginUser, logoutUser, refresh }
+export { registerUser, getMe, loginUser, logoutUser, refresh }

@@ -17,6 +17,7 @@ module.exports = {
             { allowConstantExport: true },
         ],
         "react/react-in-jsx-scope": "off",
-        "indent": ["error", 4]
+        "indent": ["error", 4],
+        "react/prop-types": 0
     },
 }
