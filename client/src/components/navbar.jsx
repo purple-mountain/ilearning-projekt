@@ -4,7 +4,7 @@ import users from "../services/users";
 
 function Nav() {
     const navigate = useNavigate()
-    const { data, isLoading, isLoadingError } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ["users"],
         queryFn: users.getCurrentUser,
     })
@@ -21,7 +21,7 @@ function Nav() {
                 </Link>
                 <div className="flex items-center">
                     <p className="mr-6 text-sm  text-gray-500 dark:text-white">{isLoading ? 'Loading...' : data?.name}</p>
-                    <button onClick={handleLogout} className="text-sm  text-blue-600 dark:text-blue-500 hover:underline">Logout</button>
+                    {!isLoading || data?.name !== 'Guest' ? <button onClick={handleLogout} className="text-sm  text-blue-600 dark:text-blue-500 hover:underline">Logout</button> : ''}
                 </div>
             </div>
         </nav>);
