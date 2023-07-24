@@ -26,7 +26,6 @@ model User {
     role        Role         @default(BASIC)
     language    Language     @default(ENGLISH)
     collections Collection[] @relation("collections")
-    likes       Like[]       @relation("userLike")
     comments    Comment[]    @relation("commentAuthor")
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt
@@ -75,7 +74,6 @@ model Item {
     id           String     @id @default(uuid())
     name         String
     description  String
-    likes        Like[]     @relation("itemLike")
     collection   Collection @relation("items", fields: [collectionId], references: [id], onDelete: Cascade)
     collectionId String
     tags         Tag[]      @relation("itemTags")
@@ -108,24 +106,15 @@ model Tag {
 }
 
 model Comment {
-    id        String   @id @default(uuid())
+    id        String    @id @default(uuid())
     content   String
-    author    User     @relation("commentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+    author    User      @relation("commentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
     authorId  String
-    item      Item     @relation("commentsItem", fields: [itemId], references: [id], onDelete: Cascade)
+    item      Item      @relation("commentsItem", fields: [itemId], references: [id], onDelete: Cascade)
     itemId    String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
-model Like {
-    id        String   @id @default(uuid())
-    user      User     @relation("userLike", fields: [userId], references: [id], onDelete: Cascade)
-    userId    String
-    item      Item     @relation("itemLike", fields: [itemId], references: [id], onDelete: Cascade)
-    itemId    String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@unique([userId, itemId])
+    parent    Comment?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+    children  Comment[] @relation("ParentChild")
+    parentId  String?
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
 }

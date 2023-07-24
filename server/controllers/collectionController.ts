@@ -10,6 +10,18 @@ const getAllCollections: RequestHandler = async (req, res) => {
     res.status(200).json(collections)
 }
 
+const getBiggestCollections: RequestHandler = async (req, res) => {
+    const biggestCollections = await prisma.collection.findMany({
+        take: 5,
+        orderBy: {
+            items: {
+                _count: "desc"
+            }
+        },
+    })
+    res.status(200).json(biggestCollections)
+}
+
 const getCollection: RequestHandler = async (req, res, next) => {
     try {
         const { id } = req.params
@@ -107,4 +119,4 @@ const createTopic: RequestHandler = async (req, res, next) => {
     }
 }
 
-export { getAllCollections, createCollection, editCollection, deleteCollection, createTopic, getCollection }
+export { getAllCollections, createCollection, editCollection, deleteCollection, createTopic, getCollection, getBiggestCollections }

@@ -2,17 +2,12 @@ import jwt from "jsonwebtoken";
 import { PrismaClient } from '@prisma/client'
 import { Request, RequestHandler } from "express";
 import { JwtToken } from "../types/jwtToken";
-
-interface CustomRequest extends Request {
-  user?: string;
-  role?: string;
-}
+import { CustomReq } from "../controllers/types/CustomReq";
 
 const prisma = new PrismaClient()
-const protect: RequestHandler = async (req: CustomRequest, res, next) => {
+const protect: RequestHandler = async (req: CustomReq, res, next) => {
     try {
         const { accessToken } = req.cookies
-        console.log('access token ---- ' + accessToken)
         const decodedToken = jwt.verify(accessToken, process.env.JWT_SECRET) as JwtToken
         if (!decodedToken.id)
             return res.status(401).json({ error: "Token Invalid" });

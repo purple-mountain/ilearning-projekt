@@ -9,7 +9,6 @@ import { router as collectionRoutes } from "./routes/collectionRoutes";
 import { router as authRoutes } from "./routes/authRoutes";
 import { router as itemRoutes } from "./routes/itemRoutes";
 import { router as commentRoutes } from "./routes/commentRoutes";
-import { router as likeRoutes } from "./routes/likeRoutes";
 
 dotenv.config()
 const app = express()
@@ -20,9 +19,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use("/api/users", authRoutes)
 app.use("/api/collections", collectionRoutes)
-app.use('/api/collections/items', itemRoutes)
-app.use('/api/collections:id/items/likes', likeRoutes)
-app.use('/api/collections:id/items/comments', commentRoutes)
+app.use('/api/items', itemRoutes)
+app.use('/api/comments', commentRoutes)
 app.use(errorMiddleware);
 
 async function main() {

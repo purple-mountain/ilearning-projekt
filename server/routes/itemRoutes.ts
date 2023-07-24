@@ -4,10 +4,10 @@ import { protect } from '../middleware/authMiddleware'
 
 const router = express.Router()
 
-router.get('/:id', getAllItems)
-router.post('/:id/create', protect, createItem)
-router.patch('/update', protect, updateItem)
-router.delete('/delete', protect, deleteItem)
-//router.get('/:id1/:id2', getItem)
+router.get('/:collectionId', getAllItems)
+router.post('/:collectionId/create', protect, createItem)
+router.patch('/update/:id', protect, updateItem)
+router.delete('/delete/:itemId', protect, deleteItem)
+router.get('/:collectionId/:itemId', getItem)
 
 export { router }
