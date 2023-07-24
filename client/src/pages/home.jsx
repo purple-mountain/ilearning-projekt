@@ -1,8 +1,14 @@
 import { Nav } from '../components/navbar';
-import { CreateCollectionForm } from '../components/createCollectionForm';
-import { BiggestCollections } from '../components/biggestCollections';
+import { CreateCollectionForm } from '../components/home/createCollectionForm';
+import { BiggestCollections } from '../components/home/biggestCollections';
+import { useQuery } from '@tanstack/react-query';
+import users from '../services/users';
 
 function Home() {
+    const { data: currentUser, isSuccess } = useQuery({
+        queryKey: ["currentUser"],
+        queryFn: users.getCurrentUser
+    })
 
     return (
         <>
@@ -10,11 +16,9 @@ function Home() {
             <main role="main">
                 <BiggestCollections />
             </main>
-            <div>
-                <div>
-                    <CreateCollectionForm />
-                </div>
-            </div>
+            {isSuccess && currentUser.name !== 'Guest' ? <div>
+                <CreateCollectionForm />
+            </div> : ''}
         </>
     )
 }

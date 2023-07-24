@@ -1,10 +1,11 @@
 import express from 'express'
-import { createCollection, createTopic, deleteCollection, editCollection, getAllCollections, getCollection } from "../controllers/collectionController"
+import { createCollection, createTopic, deleteCollection, editCollection, getAllCollections, getBiggestCollections, getCollection } from "../controllers/collectionController"
 import { protect } from '../middleware/authMiddleware'
 
 const router = express.Router()
 
 router.get('/', getAllCollections)
+router.get('/biggest', getBiggestCollections)
 router.get('/:id', getCollection)
 router.post('/create', protect, createCollection)
 router.patch('/update', protect, editCollection)

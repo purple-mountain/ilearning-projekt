@@ -1,18 +1,18 @@
 import { api } from "../config/api"
 
 async function getAll({ collectionId }) {
-    const { data } = await api.get(`/api/collections/items/${collectionId}`)
+    const { data } = await api.get(`/api/items/${collectionId}`)
     return data
 }
 
-async function getOne(collectionId, itemId) {
-    const { data } = await api.get(`/api/collections/items/${collectionId}/${itemId}`)
+async function getOne({ itemId, collectionId }) {
+    const { data } = await api.get(`/api/items/${collectionId}/${itemId}`)
     return data
 }
 
 async function create({ id, name, description, customFields }) {
     const convertedObject = convertDateFields(customFields)
-    const { data } = await api.post(`/api/collections/items/${id}/create`, { name, description, customFields: convertedObject }, { withCredentials: true })
+    const { data } = await api.post(`/api/items/${id}/create`, { name, description, customFields: convertedObject }, { withCredentials: true })
     return data
 }
 
@@ -28,12 +28,14 @@ function convertDateFields(customFields) {
     return convertedObject
 }
 
-function remove() {
-
+async function remove({ itemId }) {
+    await api.delete(`/api/items/delete/${itemId}`, { withCredentials: true })
 }
 
-async function update() {
-
+async function update({ name, description, customFields, itemId }) {
+    const convertedObject = convertDateFields(customFields)
+    const { data } = await api.patch(`/api/items/update/${itemId}`, { name, description, customFields: convertedObject }, { withCredentials: true })
+    return data
 }
 
 export default {

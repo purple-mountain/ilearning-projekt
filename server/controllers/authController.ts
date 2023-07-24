@@ -42,6 +42,71 @@ const getMe: RequestHandler = async (req: CustomReq, res, next) => {
     }
 }
 
+const getAll: RequestHandler = async (req: CustomReq, res, next) => {
+    try {
+        if (req.role === 'BASIC')
+            return res.status(400).json({ message: "Unauthorized access" })
+        const users = await prisma.user.findMany()
+        res.status(200).json(users)
+    } catch (err) {
+        next(err)
+    }
+}
+
+const remove: RequestHandler = async (req: CustomReq, res, next) => {
+    try {
+        const { id } = req.params
+        if (req.role === 'BASIC')
+            return res.status(401).json({ message: "Unauthorized access" })
+        await prisma.user.delete({
+            where: {
+                id: id
+            }
+        })
+        res.status(204).json({ message: "User has been deteled successfully" })
+    } catch (err) {
+        next(err)
+    }
+}
+
+const addAdmin: RequestHandler = async (req: CustomReq, res, next) => {
+    try {
+        const { id } = req.body
+        if (req.role === 'BASIC')
+            return res.status(401).json({ message: "Unauthorized access" })
+        const user = await prisma.user.update({
+            where: {
+                id: id
+            },
+            data: {
+                role: "ADMIN"
+            }
+        })
+        res.status(200).json(user)
+    } catch (err) {
+        next(err)
+    }
+}
+
+const removeAdmin: RequestHandler = async (req: CustomReq, res, next) => {
+    try {
+        const { id } = req.body
+        if (req.role === 'BASIC')
+            return res.status(401).json({ message: "Unauthorized access" })
+        const user = await prisma.user.update({
+            where: {
+                id: id
+            },
+            data: {
+                role: "BASIC"
+            }
+        })
+        res.status(200).json(user)
+    } catch (err) {
+        next(err)
+    }
+}
+
 const loginUser: RequestHandler = async (req, res, next) => {
     try {
         const { username, password }: LoginUser = req.body
@@ -55,7 +120,6 @@ const loginUser: RequestHandler = async (req, res, next) => {
         sendCookie(res, 'refreshToken', refreshToken, 7 * 24 * 60 * 60 * 1000)
         res.status(201).json(user)
     } catch (err) {
-        console.log('past error')
         next(err)
     }
 }
@@ -122,4 +186,4 @@ function sendCookie(res: Response, name: string, data: string, age: number) {
     })
 }
 
-export { registerUser, getMe, loginUser, logoutUser, refresh }
+export { registerUser, getMe, loginUser, logoutUser, addAdmin, removeAdmin, refresh, getAll, remove }

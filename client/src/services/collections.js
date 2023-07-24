@@ -5,6 +5,11 @@ async function getAllCollections() {
     return data
 }
 
+async function getBiggestCollections() {
+    const { data } = await api.get(`/api/collections/biggest`)
+    return data
+}
+
 async function getCollection(id) {
     const { data } = await api.get(`/api/collections/${id}`)
     return data
@@ -28,5 +33,6 @@ export default {
     remove,
     update,
     getAllCollections,
-    getCollection
+    getCollection,
+    getBiggestCollections
 }

@@ -1,17 +1,18 @@
 import { useFieldArray, useForm } from "react-hook-form";
-import collections from '../services/collections';
+import collections from '../../services/collections';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function CreateCollectionForm() {
     const navigate = useNavigate()
-    const { register, handleSubmit, formState, control } = useForm({ mode: "onSubmit" });
+    const { register, handleSubmit, formState, control, reset } = useForm({ mode: "onSubmit" });
     const { fields, append, remove } = useFieldArray({
         control,
         name: "inputs"
     })
     const queryClient = useQueryClient()
-    const { status, error, mutate } = useMutation({
+    const { mutate } = useMutation({
         mutationFn: collections.create,
         onSuccess: collection => {
             queryClient.setQueryData(["collections", collection.id], collection)
@@ -21,7 +22,7 @@ function CreateCollectionForm() {
 
     const handleAddInput = () => {
         append({})
-    }
+    } 
 
     function handleCreateCollection({ name, description, topicName, inputs }) {
         try {
@@ -31,6 +32,12 @@ function CreateCollectionForm() {
             navigate('/login', { replace: true })
         }
     }
+
+    useEffect(() => {
+        if (formState.isSubmitSuccessful) {
+            reset({ name: "", description: "", inputs: "" })
+        }
+    }, [formState, reset])
 
     return (
         <form onSubmit={handleSubmit(handleCreateCollection)} className="p-8 bg-white dark:bg-black">
