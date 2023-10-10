@@ -1,7 +1,7 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { navLinks } from "~/data/navLinks";
-import { Logo } from "./Logo";
+import { Logo } from "./logo";
 
 export function Header() {
     return (

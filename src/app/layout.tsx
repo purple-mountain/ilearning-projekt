@@ -24,9 +24,7 @@ export default function RootLayout({
                         <div className="flex h-screen flex-col justify-between font-sans">
                             <div>
                                 <Header />
-                                <main className="flex min-h-screen flex-col items-center justify-between p-24">
-                                    {children}
-                                </main>
+                                <main className="mb-auto">{children}</main>
                             </div>
                         </div>
                     </section>

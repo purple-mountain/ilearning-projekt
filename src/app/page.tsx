@@ -5,7 +5,11 @@ export default function Home() {
     return (
         <>
             <Suspense fallback={<p>Loading Collections...</p>}>
-                <Collections />
+                <Collections
+                    label={"Biggest"}
+                    description={"Here are the biggest collections"}
+                    maxDisplay={5}
+                />
             </Suspense>
         </>
     );
