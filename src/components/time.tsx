@@ -1,14 +1,21 @@
 "use client";
 
-import DateFormatter from "@date-js/date-formatter";
+import { useEffect, useState } from "react";
 
-export function Time({ createdAt }: { createdAt: Date }) {
-    return (
+export default function Time({ createdAt }: { createdAt: Date }) {
+    const [isMounted, setIsMounted] = useState<boolean>(false);
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+    return isMounted ? (
         <time dateTime={createdAt.toLocaleDateString()}>
-            {DateFormatter.format(
-                "%F %d, %Y",
-                new Date(createdAt.toLocaleDateString()),
-            )}
+            {createdAt.toLocaleDateString("default", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+            })}
         </time>
+    ) : (
+        <p>Loading Date...</p>
     );
 }

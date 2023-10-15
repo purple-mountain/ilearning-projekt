@@ -1,9 +1,9 @@
 import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { navLinks } from "~/data/navLinks";
-import { Logo } from "./logo";
+import Logo from "./logo";
 
-export function Header() {
+export default function Header() {
     return (
         <header className="flex items-center justify-between py-10">
             <div>

@@ -1,4 +1,4 @@
-export function Logo() {
+export default function Logo() {
     return (
         <svg
             version="1.1"

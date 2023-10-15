@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Collections } from "~/components/collections";
+import Collections from "~/components/collections";
 
 export default function Home() {
     return (
