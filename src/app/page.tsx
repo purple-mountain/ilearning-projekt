@@ -10,7 +10,6 @@ export default function Home() {
                 <div>
                     <Header />
                     <main className="mb-auto">
-                        {" "}
                         <Suspense fallback={<p>Loading Collections...</p>}>
                             <Collections
                                 label={"Biggest"}
