@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 interface CollectionProps {
     label: string;
     description: string;
-    maxDisplay: number;
+    maxDisplay?: number;
 }
 
 export default async function Collections({
@@ -19,6 +19,7 @@ export default async function Collections({
         include: {
             topic: true,
         },
+        take: maxDisplay && undefined,
     });
     return (
         <>
@@ -41,7 +42,7 @@ export default async function Collections({
                     ))}
                 </ul>
             </div>
-            {collections.length > maxDisplay && (
+            {maxDisplay && collections.length > maxDisplay ? (
                 <div className="flex justify-end text-base font-medium leading-6">
                     <Link
                         href="/blog"
@@ -50,10 +51,9 @@ export default async function Collections({
                         All Posts &rarr;
                     </Link>
                 </div>
+            ) : (
+                ""
             )}
-            <div className="flex items-center justify-center pt-4">
-                <p>Future form</p>
-            </div>
         </>
     );
 }

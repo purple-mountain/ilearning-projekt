@@ -13,7 +13,7 @@ export default function Header() {
                             <Logo />
                         </div>
                         <div className="hidden h-6 text-2xl font-semibold sm:block">
-                            {<h1>Collectify</h1>}
+                            <h1>Collectify</h1>
                         </div>
                     </div>
                 </Link>
