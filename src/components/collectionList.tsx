@@ -7,14 +7,16 @@ type CollectionWithTopic = Prisma.CollectionGetPayload<{
     include: { topic: true };
 }>;
 
-type CollectionOverviewProps = {
-    collection: CollectionWithTopic;
+type CollectionListProps = {
+    collections: CollectionWithTopic[];
+    maxDisplay?: number;
 };
 
-export default function CollectionOverview({
-    collection,
-}: CollectionOverviewProps) {
-    return (
+export default function CollectionList({
+    collections,
+    maxDisplay,
+}: CollectionListProps) {
+    return collections.slice(0, maxDisplay).map((collection) => (
         <li key={collection.id} className="py-12">
             <article>
                 <div className="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
@@ -30,7 +32,8 @@ export default function CollectionOverview({
                                 <h2 className="text-2xl font-bold leading-8 tracking-tight">
                                     <Link
                                         href={`/collection/${collection.id}`}
-                                        className="text-gray-900 dark:text-gray-100">
+                                        className="dark:text-gray-100"
+                                    >
                                         {collection.name}
                                     </Link>
                                 </h2>
@@ -49,13 +52,14 @@ export default function CollectionOverview({
                             <Link
                                 href={`/collection/${collection.id}`}
                                 className="text-pink-500 hover:text-pink-600 dark:hover:text-pink-400"
-                                aria-label={`Read "${collection.name}"`}>
-                                Read more &rarr;
+                                aria-label={`Read "${collection.name}"`}
+                            >
+                                See more &rarr;
                             </Link>
                         </div>
                     </div>
                 </div>
             </article>
         </li>
-    );
+    ));
 }

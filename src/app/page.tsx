@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-// import AddCollectionForm from "~/components/addCollectionForm";
+import { CreateCollectionForm } from "~/components/createCollectionForm";
 import Collections from "~/components/collections";
 import Header from "~/components/header";
 
@@ -16,7 +16,7 @@ export default function Home() {
                                 description={"Here are the biggest collections"}
                                 maxDisplay={5}
                             />
-                            {/* <AddCollectionForm /> */}
+                            <CreateCollectionForm />
                         </Suspense>
                     </main>
                 </div>

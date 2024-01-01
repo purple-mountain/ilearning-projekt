@@ -10,7 +10,8 @@ export default function Logo() {
             viewBox="0 0 40 40"
             enableBackground="new 0 0 40 40"
             xmlSpace="preserve"
-            fill="#ffffff">
+            className="fill-black dark:fill-white"
+        >
             <g display="none">
                 <path
                     display="inline"

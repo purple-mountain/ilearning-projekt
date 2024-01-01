@@ -2,6 +2,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ThemeProviders } from "./theme-providers";
+import { dark } from "@clerk/themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,14 +17,15 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <ClerkProvider>
-            <html lang="en">
+        <html lang="en" suppressHydrationWarning>
+            <ClerkProvider appearance={{ baseTheme: dark }}>
                 <body
-                    className={`${inter.className} bg-white text-black antialiased dark:bg-gray-950 dark:text-white`}>
-                    {children}
+                    className={`${inter.className} bg-white text-black antialiased dark:bg-bodyBackground dark:text-slate-200`}
+                >
+                    <ThemeProviders>{children}</ThemeProviders>
                 </body>
-            </html>
-        </ClerkProvider>
+            </ClerkProvider>
+        </html>
     );
 }
 // user roles (clerk)

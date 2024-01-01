@@ -2,6 +2,8 @@ import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { navLinks } from "~/data/navLinks";
 import Logo from "./logo";
+import { ThemeSwitch } from "./themeSwitch";
+import { dark } from "@clerk/themes";
 
 export default function Header() {
     return (
@@ -25,13 +27,17 @@ export default function Header() {
                         <Link
                             key={link.title}
                             href={link.href}
-                            className="hidden sm:block font-medium text-gray-900 dark:text-gray-100">
+                            className="hidden sm:block font-medium"
+                        >
                             {link.title}
                         </Link>
                     ))}
-                <UserButton afterSignOutUrl="/" />
                 {/* <SearchButton /> */}
-                {/* <ThemeSwitch /> */}
+                <ThemeSwitch />
+                <UserButton
+                    afterSignOutUrl="/"
+                    appearance={{ baseTheme: dark }}
+                />
                 {/* <MobileNav /> */}
             </div>
         </header>

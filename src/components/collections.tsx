@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import Link from "next/link";
-import CollectionOverview from "./collectionOverview";
+import CollectionList from "./collectionList";
 
 const prisma = new PrismaClient();
 
@@ -8,24 +8,36 @@ interface CollectionProps {
     label: string;
     description: string;
     maxDisplay?: number;
+    topic?: string;
 }
 
 export default async function Collections({
     label,
     description,
     maxDisplay,
+    topic,
 }: CollectionProps) {
     const collections = await prisma.collection.findMany({
         include: {
             topic: true,
         },
         take: maxDisplay && undefined,
+        where: {
+            topic: {
+                name: topic && undefined,
+            },
+        },
+        orderBy: {
+            items: {
+                _count: "desc",
+            },
+        },
     });
     return (
         <>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
                 <div className="space-y-2 pb-8 pt-6 md:space-y-5">
-                    <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
+                    <h1 className="text-3xl font-extrabold leading-9 tracking-tight  dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14">
                         {label}
                     </h1>
                     <p className="text-lg leading-7 text-gray-500 dark:text-gray-400">
@@ -34,12 +46,10 @@ export default async function Collections({
                 </div>
                 <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                     {!collections.length && "No posts found."}
-                    {collections.slice(0, maxDisplay).map((collection) => (
-                        <CollectionOverview
-                            collection={collection}
-                            key={collection.id}
-                        />
-                    ))}
+                    <CollectionList
+                        collections={collections}
+                        maxDisplay={maxDisplay}
+                    />
                 </ul>
             </div>
             {maxDisplay && collections.length > maxDisplay ? (
@@ -47,7 +57,8 @@ export default async function Collections({
                     <Link
                         href="/blog"
                         className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
-                        aria-label="All posts">
+                        aria-label="All posts"
+                    >
                         All Posts &rarr;
                     </Link>
                 </div>
