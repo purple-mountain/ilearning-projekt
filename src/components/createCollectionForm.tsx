@@ -21,6 +21,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
+import { Textarea } from "@/components/ui/textarea";
 
 export function CreateCollectionForm() {
     const router = useRouter();
@@ -82,8 +83,9 @@ export function CreateCollectionForm() {
                             <FormItem>
                                 <FormLabel>Description</FormLabel>
                                 <FormControl>
-                                    <Input
+                                    <Textarea
                                         placeholder="Description of the collection"
+                                        className="resize-none"
                                         {...field}
                                     />
                                 </FormControl>

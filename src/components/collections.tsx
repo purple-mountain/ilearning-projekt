@@ -21,10 +21,10 @@ export default async function Collections({
         include: {
             topic: true,
         },
-        take: maxDisplay && undefined,
+        take: maxDisplay ? maxDisplay : undefined,
         where: {
             topic: {
-                name: topic && undefined,
+                name: topic ? topic : undefined,
             },
         },
         orderBy: {
