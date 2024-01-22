@@ -19,12 +19,12 @@ enum Language {
 }
 
 model Collection {
-  id          String  @id @default(uuid())
+  id          Int     @id @default(autoincrement())
   name        String
   description String
   authorId    String
   topic       Topic   @relation("topic", fields: [topicId], references: [id], onDelete: Cascade)
-  topicId     String
+  topicId     Int
   items       Item[]  @relation("items")
   field       Field[] @relation("CollectionFields")
 
@@ -36,7 +36,7 @@ model Collection {
 }
 
 model Topic {
-  id         String       @id @default(uuid())
+  id         Int          @id @default(autoincrement())
   name       String       @unique
   collection Collection[] @relation("topic")
 
@@ -44,11 +44,11 @@ model Topic {
 }
 
 model Item {
-  id           String       @id @default(uuid())
+  id           Int          @id @default(autoincrement())
   name         String
   description  String
   collection   Collection   @relation("items", fields: [collectionId], references: [id], onDelete: Cascade)
-  collectionId String
+  collectionId Int
   fieldValue   FieldValue[] @relation("itemsCustomFieldValue")
   tags         Tag[]        @relation("itemTags")
   comments     Comment[]    @relation("commentsItem")
@@ -60,45 +60,45 @@ model Item {
 }
 
 model Field {
-  id           String       @id @default(uuid())
+  id           Int          @id @default(autoincrement())
   fieldName    String
   fieldType    String
   collection   Collection   @relation("CollectionFields", fields: [collectionId], references: [id], onDelete: Cascade)
-  collectionId String
-  fieldvalue   FieldValue[] @relation("fieldValue")
+  collectionId Int
+  fieldValue   FieldValue[] @relation("fieldValue")
 
   @@index([collectionId])
 }
 
 model FieldValue {
-  id      String @id @default(uuid())
+  id      Int    @id @default(autoincrement())
   value   String
   field   Field  @relation("fieldValue", fields: [fieldId], references: [id], onDelete: Cascade)
-  fieldId String
+  fieldId Int
   item    Item   @relation("itemsCustomFieldValue", fields: [itemId], references: [id], onDelete: Cascade)
-  itemId  String
+  itemId  Int
 
   // @@index([fieldId])
 }
 
 model Tag {
-  id     String @id @default(uuid())
+  id     Int    @id @default(autoincrement())
   name   String
   item   Item   @relation("itemTags", fields: [itemId], references: [id], onDelete: Cascade)
-  itemId String
+  itemId Int
 
   @@index([name])
 }
 
 model Comment {
-  id        String    @id @default(uuid())
+  id        Int       @id @default(autoincrement())
   content   String
   authorId  String
   item      Item      @relation("commentsItem", fields: [itemId], references: [id], onDelete: Cascade)
-  itemId    String
+  itemId    Int
   parent    Comment?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
   children  Comment[] @relation("ParentChild")
-  parentId  String?
+  parentId  Int?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
