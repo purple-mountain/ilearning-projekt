@@ -1,16 +1,16 @@
 import { Suspense } from "react";
-// import AddCollectionForm from "~/components/addCollectionForm";
-import Collections from "~/components/collections";
+import CollectionsShowcase from "~/components/collectionsShowcase";
+import { CreateCollectionForm } from "~/components/createCollectionForm";
 
-export default function Home() {
+export default function Collections() {
     return (
         <>
             <Suspense fallback={<p>Loading Collections...</p>}>
-                <Collections
+                <CollectionsShowcase
                     label={"All"}
                     description={"Here are all of the collections"}
                 />
-                {/* <AddCollectionForm /> */}
+                <CreateCollectionForm />
             </Suspense>
         </>
     );

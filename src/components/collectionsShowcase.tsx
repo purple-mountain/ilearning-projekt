@@ -11,7 +11,7 @@ interface CollectionProps {
     topic?: string;
 }
 
-export default async function Collections({
+export default async function CollectionsShowcase({
     label,
     description,
     maxDisplay,
@@ -33,6 +33,10 @@ export default async function Collections({
             },
         },
     });
+
+    //TODO: Label and description part renaming
+    // Make it into a sepereate component perhaps
+    // Change the name of the current component
     return (
         <>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -45,26 +49,27 @@ export default async function Collections({
                     </p>
                 </div>
                 <ul className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {!collections.length && "No posts found."}
-                    <CollectionList
-                        collections={collections}
-                        maxDisplay={maxDisplay}
-                    />
+                    {collections.length ? (
+                        <CollectionList
+                            collections={collections}
+                            maxDisplay={maxDisplay}
+                        />
+                    ) : (
+                        "No posts found."
+                    )}
                 </ul>
             </div>
-            {maxDisplay && collections.length > maxDisplay ? (
+            {!!maxDisplay && collections.length > maxDisplay ? (
                 <div className="flex justify-end text-base font-medium leading-6">
                     <Link
-                        href="/blog"
+                        href="/collections"
                         className="text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"
                         aria-label="All posts"
                     >
                         All Posts &rarr;
                     </Link>
                 </div>
-            ) : (
-                ""
-            )}
+            ) : null}
         </>
     );
 }

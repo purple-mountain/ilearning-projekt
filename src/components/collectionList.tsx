@@ -1,11 +1,7 @@
 import Link from "next/link";
 import Time from "./time";
 import TopicTag from "./tag";
-import { type Prisma } from "@prisma/client";
-
-type CollectionWithTopic = Prisma.CollectionGetPayload<{
-    include: { topic: true };
-}>;
+import { type CollectionWithTopic } from "~/lib/types";
 
 type CollectionListProps = {
     collections: CollectionWithTopic[];
@@ -31,7 +27,7 @@ export default function CollectionList({
                             <div>
                                 <h2 className="text-2xl font-bold leading-8 tracking-tight">
                                     <Link
-                                        href={`/collection/${collection.id}`}
+                                        href={`/collection/${collection.name.toLowerCase()}`}
                                         className="dark:text-gray-100"
                                     >
                                         {collection.name}

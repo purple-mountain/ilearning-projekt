@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 export default function Time({ createdAt }: { createdAt: Date }) {
-    const [isMounted, setIsMounted] = useState<boolean>(false);
+    const [isMounted, setIsMounted] = useState(false);
     useEffect(() => {
         setIsMounted(true);
     }, []);

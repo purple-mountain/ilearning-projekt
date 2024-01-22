@@ -1,8 +1,8 @@
 import { Suspense } from "react";
-// import AddCollectionForm from "~/components/addCollectionForm";
-import Collections from "~/components/collections";
+import CollectionsShowcase from "~/components/collectionsShowcase";
+import { CreateCollectionForm } from "~/components/createCollectionForm";
 
-export default function Home({
+export default function Topic({
     params: { slug },
 }: {
     params: { slug: string };
@@ -11,12 +11,12 @@ export default function Home({
     return (
         <>
             <Suspense fallback={<p>Loading Collections...</p>}>
-                <Collections
+                <CollectionsShowcase
                     label={topicName[0]?.toUpperCase() + topicName.slice(1)}
                     description={`Here are collections of ${topicName}`}
                     topic={topicName}
                 />
-                {/* <AddCollectionForm /> */}
+                <CreateCollectionForm />
             </Suspense>
         </>
     );

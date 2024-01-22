@@ -1,6 +1,7 @@
+import { Toaster } from "@/components/ui/toaster";
 import Header from "~/components/header";
 
-export default function RootLayout({
+export default function MainLayout({
     children,
 }: {
     children: React.ReactNode;
@@ -10,6 +11,7 @@ export default function RootLayout({
             <div className="flex h-screen flex-col justify-between font-sans">
                 <Header />
                 <main className="mb-auto">{children}</main>
+                <Toaster />
             </div>
         </section>
     );

@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import { CreateCollectionForm } from "~/components/createCollectionForm";
-import Collections from "~/components/collections";
+import CollectionsShowcase from "~/components/collectionsShowcase";
 import Header from "~/components/header";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function Home() {
     return (
@@ -11,7 +12,7 @@ export default function Home() {
                     <Header />
                     <main className="mb-auto">
                         <Suspense fallback={<p>Loading Collections...</p>}>
-                            <Collections
+                            <CollectionsShowcase
                                 label={"Biggest"}
                                 description={"Here are the biggest collections"}
                                 maxDisplay={5}
@@ -19,6 +20,7 @@ export default function Home() {
                             <CreateCollectionForm />
                         </Suspense>
                     </main>
+                    <Toaster />
                 </div>
             </div>
         </section>

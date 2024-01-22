@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 
 export function ThemeSwitch() {
-    const [mounted, setMounted] = useState(false);
+    const [mounted, setMounted] = useState<boolean>(false);
     const { theme, setTheme, resolvedTheme } = useTheme();
 
     useEffect(() => setMounted(true), []);

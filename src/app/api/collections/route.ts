@@ -1,5 +1,6 @@
 import { getAuth } from "@clerk/nextjs/server";
 import { PrismaClient } from "@prisma/client";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextResponse, type NextRequest } from "next/server";
 import { collectionFormSchema } from "~/lib/types";
 
@@ -41,10 +42,18 @@ export async function POST(request: NextRequest) {
             },
         });
         return NextResponse.json({
-            message: "Collection created",
             success: true,
+            status: 201,
         });
     } catch (err) {
+        if (err instanceof PrismaClientKnownRequestError) {
+            if (err.code === "P2002") {
+                return NextResponse.json(
+                    { error: "Duplicate collection name" },
+                    { status: 409 },
+                );
+            }
+        }
         return NextResponse.json(
             { error: "Internal Server Error" },
             { status: 500 },

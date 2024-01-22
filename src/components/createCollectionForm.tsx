@@ -22,17 +22,14 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/ui/use-toast";
+import { collectionFormDefaultValues } from "~/data/collectionFormDefaultValues";
 
 export function CreateCollectionForm() {
     const router = useRouter();
     const form = useForm<TCollectionFormSchema>({
         resolver: zodResolver(collectionFormSchema),
-        defaultValues: {
-            name: "",
-            description: "",
-            topic: {},
-            field: [],
-        },
+        defaultValues: collectionFormDefaultValues,
     });
 
     const { fields, append, remove } = useFieldArray({
@@ -49,6 +46,27 @@ export function CreateCollectionForm() {
             },
             body: JSON.stringify(values),
         });
+
+        if (!res.ok) {
+            if (res.status === 409) {
+                form.setError("name", {
+                    type: "server",
+                    message: "Collection with that name already exists",
+                });
+                return;
+            }
+            // TODO: Maybe replace this later with form error if possible
+            toast({
+                title: "Something went wrong, try again",
+            });
+            return;
+        }
+
+        toast({
+            title: "Collection has been successfully created",
+        });
+
+        form.reset(collectionFormDefaultValues);
         router.refresh();
         console.log(res);
     }
@@ -101,7 +119,7 @@ export function CreateCollectionForm() {
                                 <FormLabel>Topic</FormLabel>
                                 <FormControl>
                                     <Input
-                                        placeholder="Name of the collection"
+                                        placeholder="Topic of the collection"
                                         {...field}
                                     />
                                 </FormControl>
@@ -142,7 +160,7 @@ export function CreateCollectionForm() {
                                                     <SelectValue placeholder="Select Field Type" />
                                                 </SelectTrigger>
                                             </FormControl>
-                                            <SelectContent className="">
+                                            <SelectContent>
                                                 <SelectItem value="string">
                                                     String
                                                 </SelectItem>
@@ -151,6 +169,9 @@ export function CreateCollectionForm() {
                                                 </SelectItem>
                                                 <SelectItem value="boolean">
                                                     Boolean
+                                                </SelectItem>
+                                                <SelectItem value="date">
+                                                    Date
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>

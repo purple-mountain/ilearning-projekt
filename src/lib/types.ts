@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { type Prisma } from "@prisma/client";
 
 export const collectionFormSchema = z.object({
     name: z.string().min(1, {
@@ -26,3 +27,30 @@ export const collectionFormSchema = z.object({
 });
 
 export type TCollectionFormSchema = z.infer<typeof collectionFormSchema>;
+
+export type CollectionWithTopic = Prisma.CollectionGetPayload<{
+    include: { topic: true };
+}>;
+
+export type ItemWithFieldValues = Prisma.ItemGetPayload<{
+    include: { fieldValue: true };
+}>;
+
+export type CollectionWithItemAndField = Prisma.CollectionGetPayload<{
+    include: { items: true, field: true };
+}>;
+
+type Field = Pick<
+    Prisma.CollectionGetPayload<{
+        include: { field: true };
+    }>,
+    "field"
+>;
+
+export type ItemColumnHeader = {
+    name: string;
+    description: string;
+    field: Field;
+    createdAt: Date;
+    updatedAt: Date;
+};

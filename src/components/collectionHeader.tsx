@@ -1,22 +1,16 @@
-import { PrismaClient } from "@prisma/client";
 import Time from "./time";
 import { clerkClient } from "@clerk/nextjs";
 import NextImage from "next/image";
+import { type CollectionWithItemAndField } from "~/lib/types";
 
-const prisma = new PrismaClient();
-
-export async function CollectionHeader({ id }: { id: string }) {
-    const collection = await prisma.collection.findFirstOrThrow({
-        where: {
-            id: id,
-        },
-        include: {
-            items: true,
-        },
-    });
+export async function CollectionHeader({
+    collection,
+}: {
+    collection: CollectionWithItemAndField;
+}) {
     const author = await clerkClient.users.getUser(collection.authorId);
     return (
-        <div>
+        <div className="mb-12">
             <h1 className="text-center scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                 {collection.name}
             </h1>
@@ -43,9 +37,9 @@ export async function CollectionHeader({ id }: { id: string }) {
                             </dd>
                         </dl>
                     </div>
-                    <p className="flex items-center text-gray-500 dark:text-gray-400 leading-7">
+                    <div className="flex items-center text-gray-500 dark:text-gray-400 leading-7">
                         <Time createdAt={collection.createdAt} />
-                    </p>
+                    </div>
                 </div>
             </dd>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
