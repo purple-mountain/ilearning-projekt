@@ -4,6 +4,7 @@ import { navLinks } from "~/data/navLinks";
 import Logo from "./logo";
 import { ThemeSwitch } from "./themeSwitch";
 import { dark } from "@clerk/themes";
+import { HamburgerNav } from "./hamburgerNav";
 
 export default function Header() {
     return (
@@ -34,11 +35,8 @@ export default function Header() {
                     ))}
                 {/* <SearchButton /> */}
                 <ThemeSwitch />
-                <UserButton
-                    afterSignOutUrl="/"
-                    appearance={{ baseTheme: dark }}
-                />
-                {/* <MobileNav /> */}
+                <UserButton afterSignOutUrl="/" appearance={{ baseTheme: dark }} />
+                <HamburgerNav />
             </div>
         </header>
     );

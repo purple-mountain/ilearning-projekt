@@ -2,16 +2,14 @@ import Link from "next/link";
 import Time from "./time";
 import TopicTag from "./tag";
 import { type CollectionWithTopic } from "~/lib/types";
+import { capitalize } from "~/utils/capitalize";
 
 type CollectionListProps = {
     collections: CollectionWithTopic[];
     maxDisplay?: number;
 };
 
-export default function CollectionList({
-    collections,
-    maxDisplay,
-}: CollectionListProps) {
+export default function CollectionList({ collections, maxDisplay }: CollectionListProps) {
     return collections.slice(0, maxDisplay).map((collection) => (
         <li key={collection.id} className="py-12">
             <article>
@@ -27,10 +25,10 @@ export default function CollectionList({
                             <div>
                                 <h2 className="text-2xl font-bold leading-8 tracking-tight">
                                     <Link
-                                        href={`/collection/${collection.name.toLowerCase()}`}
+                                        href={`/collection/${collection.id}`}
                                         className="dark:text-gray-100"
                                     >
-                                        {collection.name}
+                                        {capitalize(collection.name)}
                                     </Link>
                                 </h2>
                                 <div className="flex flex-wrap">

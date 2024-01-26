@@ -2,19 +2,16 @@ import Time from "./time";
 import { clerkClient } from "@clerk/nextjs";
 import NextImage from "next/image";
 import { type CollectionWithItemAndField } from "~/lib/types";
+import { capitalize } from "~/utils/capitalize";
 
-export async function CollectionHeader({
-    collection,
-}: {
-    collection: CollectionWithItemAndField;
-}) {
+export async function CollectionHeader({ collection }: { collection: CollectionWithItemAndField }) {
     const author = await clerkClient.users.getUser(collection.authorId);
     return (
         <div className="mb-12">
             <h1 className="text-center scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                {collection.name}
+                {capitalize(collection.name)}
             </h1>
-            <dd className="mt-5">
+            <dd className="mt-10">
                 <div className="flex flex-wrap justify-between">
                     <div className="flex items-center space-x-3">
                         <NextImage
@@ -42,9 +39,7 @@ export async function CollectionHeader({
                     </div>
                 </div>
             </dd>
-            <p className="leading-7 [&:not(:first-child)]:mt-6">
-                {collection.description}
-            </p>
+            <p className="leading-7 [&:not(:first-child)]:mt-6">{collection.description}</p>
         </div>
     );
 }

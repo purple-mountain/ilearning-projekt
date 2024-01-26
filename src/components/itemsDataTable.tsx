@@ -24,6 +24,8 @@ export function ItemsDataTable<TData, TValue>({ columns, data }: DataTableProps<
         getCoreRowModel: getCoreRowModel(),
     });
 
+    // TODO: add loading suspense in route group and continue with data table
+
     return (
         <div className="rounded-md border">
             <Table>

@@ -37,7 +37,14 @@ export type ItemWithFieldValues = Prisma.ItemGetPayload<{
 }>;
 
 export type CollectionWithItemAndField = Prisma.CollectionGetPayload<{
-    include: { items: true, field: true };
+    include: {
+        items: {
+            include: {
+                fieldValue: true;
+            };
+        };
+        field: true;
+    };
 }>;
 
 type Field = Pick<
@@ -49,8 +56,10 @@ type Field = Pick<
 
 export type ItemColumnHeader = {
     name: string;
-    description: string;
-    field: Field;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
+};
+
+export type ItemWithFieldsNames = {
+    [K in Field["field"][number]["fieldName"]]?: string;
 };
