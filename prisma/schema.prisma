@@ -1,0 +1,104 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  BASIC
+  ADMIN
+}
+
+enum Language {
+  ENGLISH
+  RUSSIAN
+}
+
+model Collection {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  authorId    String
+  topic       Topic   @relation("topic", fields: [topicId], references: [id], onDelete: Cascade)
+  topicId     Int
+  items       Item[]  @relation("items")
+  field       Field[] @relation("CollectionFields")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([name])
+  @@index([authorId, name])
+}
+
+model Topic {
+  id         Int          @id @default(autoincrement())
+  name       String       @unique
+  collection Collection[] @relation("topic")
+
+  @@index([name])
+}
+
+model Item {
+  id           Int          @id @default(autoincrement())
+  name         String
+  description  String
+  collection   Collection   @relation("items", fields: [collectionId], references: [id], onDelete: Cascade)
+  collectionId Int
+  fieldValue   FieldValue[] @relation("itemsCustomFieldValue")
+  tags         Tag[]        @relation("itemTags")
+  comments     Comment[]    @relation("commentsItem")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([collectionId])
+}
+
+model Field {
+  id           Int          @id @default(autoincrement())
+  fieldName    String
+  fieldType    String
+  collection   Collection   @relation("CollectionFields", fields: [collectionId], references: [id], onDelete: Cascade)
+  collectionId Int
+  fieldValue   FieldValue[] @relation("fieldValue")
+
+  @@index([collectionId])
+}
+
+model FieldValue {
+  id      Int    @id @default(autoincrement())
+  value   String
+  field   Field  @relation("fieldValue", fields: [fieldId], references: [id], onDelete: Cascade)
+  fieldId Int
+  item    Item   @relation("itemsCustomFieldValue", fields: [itemId], references: [id], onDelete: Cascade)
+  itemId  Int
+
+  // @@index([fieldId])
+}
+
+model Tag {
+  id     Int    @id @default(autoincrement())
+  name   String
+  item   Item   @relation("itemTags", fields: [itemId], references: [id], onDelete: Cascade)
+  itemId Int
+
+  @@index([name])
+}
+
+model Comment {
+  id        Int       @id @default(autoincrement())
+  content   String
+  authorId  String
+  item      Item      @relation("commentsItem", fields: [itemId], references: [id], onDelete: Cascade)
+  itemId    Int
+  parent    Comment?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+  children  Comment[] @relation("ParentChild")
+  parentId  Int?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
