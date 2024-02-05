@@ -24,7 +24,7 @@ export function ItemsDataTable<TData, TValue>({ columns, data }: DataTableProps<
         getCoreRowModel: getCoreRowModel(),
     });
 
-    // TODO: add loading suspense in route group and continue with data table
+    // TODO: ID for Link (can use continue in the loop) and index access
 
     return (
         <div className="rounded-md border">
@@ -57,7 +57,7 @@ export function ItemsDataTable<TData, TValue>({ columns, data }: DataTableProps<
                                             <Link
                                                 className="text-blue-700"
                                                 href={`/item/${
-                                                    row.getVisibleCells()[0]?.getValue() as number
+                                                    row.getVisibleCells()[1]?.getValue() as number
                                                 }`}
                                             >
                                                 {flexRender(

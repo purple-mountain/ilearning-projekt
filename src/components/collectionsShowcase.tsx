@@ -34,9 +34,6 @@ export default async function CollectionsShowcase({
         },
     });
 
-    //TODO: Label and description part renaming
-    // Make it into a sepereate component perhaps
-    // Change the name of the current component
     return (
         <>
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -50,10 +47,7 @@ export default async function CollectionsShowcase({
                 </div>
                 <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                     {collections.length ? (
-                        <CollectionList
-                            collections={collections}
-                            maxDisplay={maxDisplay}
-                        />
+                        <CollectionList collections={collections} maxDisplay={maxDisplay} />
                     ) : (
                         "No posts found."
                     )}

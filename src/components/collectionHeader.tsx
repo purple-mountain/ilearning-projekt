@@ -6,6 +6,7 @@ import { capitalize } from "~/utils/capitalize";
 
 export async function CollectionHeader({ collection }: { collection: CollectionWithItemAndField }) {
     const author = await clerkClient.users.getUser(collection.authorId);
+
     return (
         <div className="mb-12">
             <h1 className="text-center scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">

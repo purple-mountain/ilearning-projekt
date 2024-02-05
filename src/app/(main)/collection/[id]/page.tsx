@@ -1,14 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { CollectionHeader } from "~/components/collectionHeader";
-import { ItemsDataTable } from "~/components/itemsDataTable";
-import { type ColumnDef } from "@tanstack/react-table";
-import { type ItemColumnHeader, type ItemWithFieldsNames } from "~/lib/types";
-import { getItemHeaders } from "~/utils/getItemHeaders";
-import { getColumns } from "~/utils/getColumns";
+import { ItemsDataTableWrapper } from "~/components/itemsDataTableWrapper";
 
 const prisma = new PrismaClient();
-
-type ItemHeaders = ItemWithFieldsNames | ItemColumnHeader;
+const ITEMS_TABLE_PAGINATION_LIMIT = 10;
 
 async function getCollection(id: string) {
     const parsedId = parseInt(id);
@@ -35,13 +30,10 @@ export default async function Collection({ params: { id } }: { params: { id: str
         return <p>Not found</p>;
     }
 
-    const itemsData: ItemHeaders[] = getItemHeaders(collection);
-    const columns: ColumnDef<ItemHeaders>[] = getColumns(collection.field);
-
     return (
         <>
             <CollectionHeader collection={collection} />
-            <ItemsDataTable columns={columns} data={itemsData} />
+            <ItemsDataTableWrapper collection={collection} />
         </>
     );
 }
