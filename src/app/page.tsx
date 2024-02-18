@@ -3,6 +3,7 @@ import { CreateCollectionForm } from "~/components/createCollectionForm";
 import CollectionsShowcase from "~/components/collectionsShowcase";
 import Header from "~/components/header";
 import { Toaster } from "@/components/ui/toaster";
+import CollectionsShowcaseSkeleton from "~/components/collectionsShowcaseSkeleton";
 
 export default function Home() {
     return (
@@ -11,7 +12,7 @@ export default function Home() {
                 <div>
                     <Header />
                     <main className="mb-auto">
-                        <Suspense fallback={<p>Loading Collections...</p>}>
+                        <Suspense fallback={<CollectionsShowcaseSkeleton />}>
                             <CollectionsShowcase
                                 label={"Biggest"}
                                 description={"Here are the biggest collections"}

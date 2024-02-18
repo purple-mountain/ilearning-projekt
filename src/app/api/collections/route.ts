@@ -11,9 +11,11 @@ export async function POST(request: NextRequest) {
         const body: unknown = await request.json();
         const { name, description, topic, field } = collectionFormSchema.parse(body);
         const { userId } = getAuth(request);
+
         if (userId === null) {
             return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
         }
+
         await prisma.collection.create({
             data: {
                 field: {
@@ -22,7 +24,7 @@ export async function POST(request: NextRequest) {
                         fieldType: f.fieldType,
                     })),
                 },
-                name: name,
+                name: name.toLowerCase(),
                 description: description,
                 topic: {
                     connectOrCreate: {
@@ -37,6 +39,7 @@ export async function POST(request: NextRequest) {
                 authorId: userId,
             },
         });
+
         return NextResponse.json({
             success: true,
             status: 201,

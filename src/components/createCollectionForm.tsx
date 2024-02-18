@@ -31,14 +31,14 @@ export function CreateCollectionForm() {
         resolver: zodResolver(collectionFormSchema),
         defaultValues: collectionFormDefaultValues,
     });
-
     const { fields, append, remove } = useFieldArray({
         control: form.control,
         name: "field",
     });
 
+    // TODO: Make the form into a dialog
+
     async function handleCreateCollection(values: TCollectionFormSchema) {
-        console.log(values);
         const res = await fetch("/api/collections", {
             method: "POST",
             headers: {
@@ -72,7 +72,7 @@ export function CreateCollectionForm() {
     }
 
     return (
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-10">
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(handleCreateCollection)}
@@ -85,10 +85,7 @@ export function CreateCollectionForm() {
                             <FormItem>
                                 <FormLabel>Name</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        placeholder="Name of the collection"
-                                        {...field}
-                                    />
+                                    <Input placeholder="Name of the collection" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -118,10 +115,7 @@ export function CreateCollectionForm() {
                             <FormItem>
                                 <FormLabel>Topic</FormLabel>
                                 <FormControl>
-                                    <Input
-                                        placeholder="Topic of the collection"
-                                        {...field}
-                                    />
+                                    <Input placeholder="Topic of the collection" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -136,10 +130,7 @@ export function CreateCollectionForm() {
                                     <FormItem className="mb-6">
                                         <FormLabel>Field Name</FormLabel>
                                         <FormControl>
-                                            <Input
-                                                placeholder="Name of the field"
-                                                {...field}
-                                            />
+                                            <Input placeholder="Name of the field" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -161,18 +152,10 @@ export function CreateCollectionForm() {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="string">
-                                                    String
-                                                </SelectItem>
-                                                <SelectItem value="number">
-                                                    Number
-                                                </SelectItem>
-                                                <SelectItem value="boolean">
-                                                    Boolean
-                                                </SelectItem>
-                                                <SelectItem value="date">
-                                                    Date
-                                                </SelectItem>
+                                                <SelectItem value="string">String</SelectItem>
+                                                <SelectItem value="number">Number</SelectItem>
+                                                <SelectItem value="boolean">Boolean</SelectItem>
+                                                <SelectItem value="date">Date</SelectItem>
                                             </SelectContent>
                                         </Select>
                                         <FormMessage />

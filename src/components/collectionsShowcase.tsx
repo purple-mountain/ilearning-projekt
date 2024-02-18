@@ -53,7 +53,7 @@ export default async function CollectionsShowcase({
                     )}
                 </ul>
             </div>
-            {!!maxDisplay && collections.length > maxDisplay ? (
+            {!!maxDisplay && (
                 <div className="flex justify-end text-base font-medium leading-6">
                     <Link
                         href="/collections"
@@ -63,7 +63,7 @@ export default async function CollectionsShowcase({
                         All Posts &rarr;
                     </Link>
                 </div>
-            ) : null}
+            )}
         </>
     );
 }
